@@ -1,15 +1,9 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  changeContact,
-} = require("../models/contacts");
+const db = require("../db/index");
 
 const getAllContacts = async (req, res, next) => {
   try {
-    const result = await listContacts();
-
+    const result = await db.getAllcontacts();
+    console.log(result);
     res.json({
       status: "success",
       code: 200,
@@ -18,6 +12,7 @@ const getAllContacts = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -25,7 +20,7 @@ const getAllContacts = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const id = req.params.contactId;
-    const result = await getContactById(id);
+    const result = await db.getContactById(id);
 
     if (!result) {
       res.status(404).json({
@@ -49,7 +44,7 @@ const getById = async (req, res, next) => {
 const deleteById = async (req, res, next) => {
   try {
     const id = req.params.contactId;
-    const result = await removeContact(id);
+    const result = await db.removeContact(id);
 
     if (!result) {
       res.status(404).json({
@@ -70,7 +65,8 @@ const deleteById = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
   try {
-    const contact = await addContact(req.body);
+    const contact = await db.createContact(req.body);
+    console.log(contact);
     res.status(201).json({
       status: "success",
       code: 201,
@@ -82,10 +78,11 @@ const createContact = async (req, res, next) => {
     next(error);
   }
 };
+
 const updateContact = async (req, res, next) => {
   try {
     const id = req.params.contactId;
-    const result = await getContactById(id);
+    const result = await db.getContactById(id);
     console.log(result);
     if (!result) {
       res.status(404).json({
@@ -94,7 +91,7 @@ const updateContact = async (req, res, next) => {
       });
     }
 
-    const updatedContact = await changeContact(id, req.body);
+    const updatedContact = await db.updateContact(id, req.body);
 
     res.json({
       status: "success",
@@ -107,10 +104,38 @@ const updateContact = async (req, res, next) => {
     next(error);
   }
 };
+
+const updateContactFavorite = async (req, res, next) => {
+  try {
+    const id = req.params.contactId;
+    const result = await db.getContactById(id);
+    console.log(result);
+    if (!result) {
+      res.status(404).json({
+        code: 404,
+        message: "Not found",
+      });
+    }
+
+    const updatedContact = await db.updateContactFavorite(id, req.body);
+
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        contact: updatedContact,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllContacts,
   getById,
   deleteById,
   createContact,
   updateContact,
+  updateContactFavorite,
 };

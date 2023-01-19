@@ -5,6 +5,7 @@ const {
   deleteById,
   createContact,
   updateContact,
+  updateContactFavorite,
 } = require("../../controllers/contacts");
 const {
   validationCreatePost,
@@ -22,5 +23,10 @@ router.post("/", validationCreatePost, createContact);
 router.delete("/:contactId", deleteById);
 
 router.put("/:contactId", validationUpdatePost, updateContact);
+router.patch(
+  "/:contactId/favorite",
+  validationUpdatePost,
+  updateContactFavorite
+);
 
 module.exports = router;
