@@ -25,6 +25,10 @@ const item = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: mongoose.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );

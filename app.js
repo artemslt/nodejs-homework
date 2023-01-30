@@ -4,7 +4,9 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const contactsRouter = require("./routes/api/contacts");
+const contactsRouter = require("./routes/contacts");
+const authRouter = require("./routes/auth");
+
 const app = express();
 
 async function main() {
@@ -24,6 +26,7 @@ async function main() {
     app.use(express.json());
 
     app.use("/api/contacts", contactsRouter);
+    app.use("/api/users", authRouter);
 
     app.use((req, res) => {
       res.status(404).json({ message: "Not found" });
