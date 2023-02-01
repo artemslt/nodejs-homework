@@ -1,9 +1,12 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+
 require("dotenv").config();
+
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
+
 const contactsRouter = require("./routes/contacts");
 const authRouter = require("./routes/auth");
 
@@ -24,6 +27,8 @@ async function main() {
     app.use(logger(formatsLogger));
     app.use(cors());
     app.use(express.json());
+
+    app.use("/public", express.static("public"));
 
     app.use("/api/contacts", contactsRouter);
     app.use("/api/users", authRouter);

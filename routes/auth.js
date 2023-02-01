@@ -6,10 +6,11 @@ const {
   getCurrent,
   logout,
   updateStatus,
+  updateAvatar,
 } = require("../controllers/auth");
 const { auth } = require("../middleware/authMiddleware");
+const { upload } = require("../middleware/mutler");
 const { userValidation } = require("../middleware/userValidation");
-// const { updateStatus } = require("../controllers/user");
 
 const authRouter = express.Router();
 
@@ -18,5 +19,6 @@ authRouter.post("/login", userValidation, login);
 authRouter.get("/current", auth, getCurrent);
 authRouter.post("/logout", auth, logout);
 authRouter.patch("/", auth, updateStatus);
+authRouter.patch("/avatars", auth, upload.single("avatar"), updateAvatar);
 
 module.exports = authRouter;
